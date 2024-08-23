@@ -28,7 +28,8 @@ async def main():  # นิยามฟังก์ชัน coroutine ชื่
     tasks = [asyncio.create_task(task_coro(i)) for i in range(10)]  # สร้างรายการของงาน coroutine จำนวน 10 งาน โดยใช้ task_coro และสร้างงานด้วย asyncio.create_task()
     # wait for the first task to complete
     # รอให้งานแรกเสร็จสมบูรณ์
-    done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)  # รอให้งานในรายการเสร็จงานแรก โดยใช้ asyncio.wait() และเก็บผลลัพธ์ใน done และ pending
+    done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+    # รอให้งานในรายการเสร็จงานแรก โดยใช้ asyncio.wait() และเก็บผลลัพธ์ใน done และ pending
     # report result
     # รายงานผลลัพธ์
     print('Done')  # พิมพ์คำว่า 'Done'
