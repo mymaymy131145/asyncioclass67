@@ -53,7 +53,7 @@ async def main():
     # Specific test case: Queue = 5, Customers = 10, Cashiers = 5, with specific checkout times
     
     customers = 10
-    queue_size = 10
+    queue_size = 3
     cashiers = 5
     checkout_times = [2.0, 2.4, 0.4, 3.2, 3.6]  # Specific checkout times for each cashier
 
@@ -62,19 +62,16 @@ async def main():
 
     start_time = time.perf_counter()
 
-    # Create the producer task
-    customer_producer = asyncio.create_task(customer_generation(customer_queue, customers))
-
-    # Create the consumer tasks for cashiers
-    cashier_tasks = [checkout_customer(customer_queue, i, cashier_stats, checkout_times) for i in range(cashiers)]
-
-    # Run all tasks concurrently
-    await asyncio.gather(customer_producer, *cashier_tasks)
+    async with asyncio.TaskGroup() as group:
+        # Create task for customer generation
+        customer_group = group.create_task(customer_generation(customer_queue, customers))
+        # Create tasks for the cashiers
+        cashier_group = [group.create_task(checkout_customer(customer_queue, i, cashier_stats, checkout_times)) for i in range(cashiers)]
 
     # Sort and print statistics for each cashier by cashier number
     sorted_stats = sorted(cashier_stats.items())  # Sort by cashier number
     for cashier_number, (customers_served, total_time) in sorted_stats:
-        print(f"The Cashier_{cashier_number} took {customers_served} customers total {total_time:.2f} seconds")
+        print(f"The Cashier_{cashier_number} take {customers_served} customers total {total_time:.2f} seconds")
 
     # Print total time taken for all customers
     print(f"Total Time for {customers} customers with {cashiers} cashiers: {round(time.perf_counter() - start_time, 2)} seconds")
