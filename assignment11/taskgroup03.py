@@ -53,7 +53,7 @@ async def main():
     # Specific test case: Queue = 5, Customers = 10, Cashiers = 5, with specific checkout times
     
     customers = 10
-    queue_size = 3
+    queue_size = 5
     cashiers = 5
     checkout_times = [2.0, 2.4, 0.4, 3.2, 3.6]  # Specific checkout times for each cashier
 
